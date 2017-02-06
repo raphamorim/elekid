@@ -59,6 +59,7 @@ function Masamune(componentPath, template) {
   console.log(`${process.cwd()}/${componentPath}`)
   transform = babel.transformFileSync(`${process.cwd()}/${componentPath}`, {
       presets: ['es2015-node'],
+      ignore: /node_modules/,
       plugins: [
         'transform-react-jsx'
       ]
