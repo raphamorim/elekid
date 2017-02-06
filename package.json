@@ -1,0 +1,27 @@
+{
+  "name": "masamune",
+  "version": "1.0.0",
+  "description": "## main.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.22.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-export-default-module-exports": "0.0.4",
+    "babel-preset-react": "^6.22.0",
+    "browserify": "^14.0.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "require-from-string": "^1.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.22.0",
+    "babel-plugin-transform-react-jsx": "^6.22.0",
+    "babel-preset-es2015-node": "^6.1.1"
+  }
+}
