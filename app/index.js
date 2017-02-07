@@ -1,7 +1,7 @@
 import React, { Component } from 'React'
 import piranho from './piranho'
 
-export default class Tabs extends Component {
+export default class Index extends Component {
   // TODO: unfocus and focus (class)
 
   constructor(props) {

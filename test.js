@@ -1,5 +1,5 @@
-// const app = require('./app')
-// console.log(app)
+const app = require('./bundle.js')
+console.log(app)
 
 const masamune = require('./index')
 const template = (app) => {
@@ -17,4 +17,4 @@ const template = (app) => {
   </html>`
 }
 
-masamune('app.js', template)
+masamune('app/index.js', template)

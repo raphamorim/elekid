@@ -1,11 +1,11 @@
 import React from 'React'
-import tab from './tab'
+import menu from './menu'
 
 export default function Piranho(props) {
     return (
       <div>
         <section role="topbar" className="topbar" />
-        <tab/>
+        <menu/>
       </div>
     )
 }

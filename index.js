@@ -1,78 +1,38 @@
 const fs = require('fs')
-const babel = require('babel-core')
+const babelify = require('babelify')
+const browserify = require('browserify')
 const react = require('react')
 const requireFromString = require('require-from-string')
 const reactDOMServer = require('react-dom/server')
+const streams = require('memory-streams')
 
 function Masamune(componentPath, template) {
-  function getRequires(requires, body) {
-    return new Promise((resolve) => {
-    for (var i = 0; i < body.length; i++) {
-      if (!body[i] || !body[i].type) return
+  // return Promise((resolve, reject) => {
 
-      if (body[i].type === 'VariableDeclarator') {
-        getRequires(requires, [body[i].init])
-      }
-      if (body[i].type === 'VariableDeclaration') {
-        getRequires(requires, body[i].declarations)
-      }
-      if (body[i].type === 'ConditionalExpression') {
-        getRequires(requires, [body[i].test, body[i].consequent])
-      }
-      if (body[i].type === 'AssignmentExpression') {
-        getRequires(requires, [body[i].left, body[i].right])
-      }
-      if (body[i].type === 'ExpressionStatement') {
-        if (body[i].expression.type === 'SequenceExpression')
-          getRequires(requires, body[i].expression.expressions)
+    var writer = new streams.WritableStream()
 
-        getRequires(requires, [body[i].expression.left, body[i].expression.right])
-      }
-      if (body[i].type === 'FunctionDeclaration') {
-        getRequires(requires, (body[i].body.body || []))
-      }
-      if (body[i].type === 'ImportDeclaration') {
-        requires.push(body[i].source.value)
-      }
-      if (body[i].type === 'CallExpression') {
-        if (body[i].callee.type === 'MemberExpression') {
-          getRequires(requires, [body[i].callee.object])
-        }
+    console.log(`${process.cwd()}/${componentPath}`)
+    browserify('./app/index.js')
+      .transform('babelify', {
+        ignore: /node_modules/,
+        presets: ['es2015-node', 'react'],
+        plugins: ['add-module-exports']
+      })
+      .bundle((err, buf) => {
+        if (err) throw err
 
-        if (body[i].callee.name === 'require') {
-          requires.push(body[i].arguments[0].value)
-        }
-      }
-    }
-      resolve(requires)
-    })
-  }
+        let code = buf.toString()
+        code = code.replace('exports.default', 'module.exports')
+        fs.writeFileSync('bundle.js', code)
+        const a = requireFromString(code)
+        console.log(1, a)
+        // console.log(code)
+        // const App = react.createElement(requireFromString(code))
+        // console.log(reactDOMServer.renderToString(App))
+      })
+      .pipe(fs.createWriteStream('bundle.js'))
+  // })
 
-  let transform
-    // function run(ast) {
-    //   console.log(ast.program.body)
-    //   for (var i = 0; i < ast.program.body.length; i++) {
-    //     console.log(ast.program.body[i])
-    //   }
-    // }
-
-  console.log(`${process.cwd()}/${componentPath}`)
-  transform = babel.transformFileSync(`${process.cwd()}/${componentPath}`, {
-      presets: ['es2015-node'],
-      ignore: /node_modules/,
-      plugins: [
-        'transform-react-jsx'
-      ]
-    })
-    // run(transform.ast)
-
-  getRequires([], transform.ast.program.body).then((result) => {
-    console.log(result)
-    transform = transform.code.replace('exports.default', 'module.exports')
-    console.log(transform)
-    const App = react.createElement(requireFromString(transform))
-    console.log(reactDOMServer.renderToString(App))
-  })
 }
 
 module.exports = Masamune
