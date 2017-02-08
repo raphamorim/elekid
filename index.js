@@ -49,12 +49,6 @@ function Masamune(componentPath, template) {
   }
 
   let transform
-    // function run(ast) {
-    //   console.log(ast.program.body)
-    //   for (var i = 0; i < ast.program.body.length; i++) {
-    //     console.log(ast.program.body[i])
-    //   }
-    // }
 
   console.log(`${process.cwd()}/${componentPath}`)
   transform = babel.transformFileSync(`${process.cwd()}/${componentPath}`, {
@@ -64,15 +58,39 @@ function Masamune(componentPath, template) {
         'transform-react-jsx'
       ]
     })
-    // run(transform.ast)
 
   getRequires([], transform.ast.program.body).then((result) => {
     console.log(result)
     transform = transform.code.replace('exports.default', 'module.exports')
     console.log(transform)
-    const App = react.createElement(requireFromString(transform))
-    console.log(reactDOMServer.renderToString(App))
+
+    try {
+      const app = requireFromString(transform)
+      console.log(app)
+      const App = react.createElement(app)
+      console.log(reactDOMServer.renderToString(App))
+    } catch(err) {
+      console.log(err)
+    }
   })
 }
 
-module.exports = Masamune
+// const masamune_require = require('../index.js').req;
+// replace `require()` by `masamune_require(__dirname, './atoms/piranho.js');`
+
+exports.req = function masamuneRequire(dirname, dep) {
+  dep = dep.replace('./', '')
+  transform = babel.transformFileSync(`${dirname}/${dep}`, {
+    presets: ['es2015-node'],
+    ignore: /node_modules/,
+    plugins: [
+      'transform-react-jsx'
+    ]
+  })
+  transform = transform.code.replace('exports.default', 'module.exports')
+  const component = requireFromString(transform)
+  console.log(component)
+  return component
+}
+
+exports.build = Masamune

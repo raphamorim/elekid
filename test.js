@@ -17,4 +17,4 @@ const template = (app) => {
   </html>`
 }
 
-masamune('app.js', template)
+masamune.build('app/main.js', template)
