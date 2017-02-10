@@ -1,4 +1,5 @@
 import React from 'React'
+import { log }  from './helpers'
 import Tab from './atoms/Tab'
 
 export default function Dialog(props) {

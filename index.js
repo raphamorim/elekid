@@ -1,8 +1,10 @@
 'use strict';
 
 const fs = require('fs')
+const url = require('url')
 const babel = require('babel-core')
 const react = require('react')
+const tmp = require('tmp')
 const requireFromString = require('require-from-string')
 const reactDOMServer = require('react-dom/server')
 
@@ -71,14 +73,25 @@ function Elekid(componentPath, template) {
     presets: ['es2015-node', 'react'],
     ignore: /node_modules/,
   })
+
   transform = transform.code.replace('exports.default', 'module.exports')
-  transform = `require = require('elekid').load; ${transform}`
+  transform = `"use strict"; require = require('elekid').load; ${transform}`
 
   try {
     const app = requireFromString(transform)
     const App = react.createElement(app)
     const appString = reactDOMServer.renderToString(App)
-    return appString
+    const body = template(appString)
+
+    __debug(template(appString), true)
+    const tmpobj = tmp.fileSync()
+    fs.writeFileSync(tmpobj.name, body, 'utf-8')
+
+    return url.format(
+        pathname: tmpobj.name,
+        protocol: 'file:',
+        slashes: true
+    }
   } catch(err) {
     __debug(err)
   }
@@ -96,13 +109,15 @@ exports.load = function load(path) {
     } catch (err) {
       path = path.replace('./', '')
       path = `${DIRPATH}/${path}.js`
+
       __debug(path, true)
 
-      transform = babel.transformFileSync(path, {
+      let transform = babel.transformFileSync(path, {
         presets: ['es2015-node', 'react'],
         ignore: /node_modules/,
       })
       transform = transform.code.replace('exports.default', 'module.exports')
+      transform = `"use strict"; require = require('elekid').load; ${transform}`
       const component = requireFromString(transform)
       return component
     }
