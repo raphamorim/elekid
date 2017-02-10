@@ -1,7 +1,7 @@
 // const app = require('./app')
 // console.log(app)
 
-const masamune = require('./index')
+const elekid = require('./index')
 const template = (app) => {
   return `<!DOCTYPE html>
   <html>
@@ -17,4 +17,4 @@ const template = (app) => {
   </html>`
 }
 
-console.log(masamune.build('app/main.js', template))
+console.log(elekid.build('app/main.js', template))

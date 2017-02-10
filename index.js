@@ -17,7 +17,7 @@ const __debug = function debug(message, important) {
   }
 }
 
-function Masamune(componentPath, template) {
+function Elekid(componentPath, template) {
   function getRequires(requires, body) {
     return new Promise((resolve) => {
     for (var i = 0; i < body.length; i++) {
@@ -72,7 +72,7 @@ function Masamune(componentPath, template) {
     ignore: /node_modules/,
   })
   transform = transform.code.replace('exports.default', 'module.exports')
-  transform = `require = require('../index.js').load; ${transform}`
+  transform = `require = require('elekid').load; ${transform}`
 
   try {
     const app = requireFromString(transform)
@@ -84,8 +84,9 @@ function Masamune(componentPath, template) {
   }
 }
 
+// transfomer:
 // const require = require('../index.js').load;
-// require('./atoms/piranho.js');`
+// require('./path/component.js');
 
 exports.load = function load(path) {
   try {
@@ -98,11 +99,8 @@ exports.load = function load(path) {
       __debug(path, true)
 
       transform = babel.transformFileSync(path, {
-        presets: ['es2015-node'],
+        presets: ['es2015-node', 'react'],
         ignore: /node_modules/,
-        plugins: [
-          'transform-react-jsx'
-        ]
       })
       transform = transform.code.replace('exports.default', 'module.exports')
       const component = requireFromString(transform)
@@ -113,4 +111,4 @@ exports.load = function load(path) {
   }
 }
 
-exports.build = Masamune
+exports.build = Elekid

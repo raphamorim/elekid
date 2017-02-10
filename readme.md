@@ -1,15 +1,15 @@
-# Masamune
+# Elekid
 
 ## main.js
 
 ```
-const masamune = require('masamune')
+const elekid = require('elekid')
 const template = require('./template')
 
 function createWindow() {
   let mainWindow = new BrowserWindow(config)
 
-  mainWindow.loadURL(masamune('src/App.js', template))
+  mainWindow.loadURL(elekid.build('src/App.js', template))
 ```
 
 ## template.js
