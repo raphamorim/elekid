@@ -84,14 +84,14 @@ function Elekid(componentPath, template) {
     const body = template(appString)
 
     __debug(template(appString), true)
-    const tmpobj = tmp.fileSync()
+    const tmpobj = tmp.fileSync({ postfix: '.html' })
     fs.writeFileSync(tmpobj.name, body, 'utf-8')
 
-    return url.format(
-        pathname: tmpobj.name,
-        protocol: 'file:',
-        slashes: true
-    }
+    return url.format({
+      pathname: tmpobj.name,
+      protocol: 'file:',
+      slashes: true
+    })
   } catch(err) {
     __debug(err)
   }
