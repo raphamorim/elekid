@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs')
 const babel = require('babel-core')
 const react = require('react')
@@ -66,12 +68,9 @@ function Masamune(componentPath, template) {
   DIRPATH = componentAbsolutePath.replace(/\/[^\/]+$/, '')
 
   let transform = babel.transformFileSync(componentAbsolutePath, {
-      presets: ['es2015-node'],
-      ignore: /node_modules/,
-      plugins: [
-        'transform-react-jsx'
-      ]
-    })
+    presets: ['es2015-node', 'react'],
+    ignore: /node_modules/,
+  })
   transform = transform.code.replace('exports.default', 'module.exports')
   transform = `require = require('../index.js').load; ${transform}`
 
