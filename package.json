@@ -1,12 +1,12 @@
 {
   "name": "masamune",
   "version": "1.0.0",
-  "description": "## main.js",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Raphael Amorim <rapha850@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "babel-core": "6.22.1",
