@@ -4,7 +4,6 @@ const fs = require('fs')
 const url = require('url')
 const babel = require('babel-core')
 const react = require('react')
-const tmp = require('tmp')
 const requireFromString = require('require-from-string')
 const reactDOMServer = require('react-dom/server')
 
@@ -20,6 +19,14 @@ const __debug = function debug(message, important) {
 }
 
 function Elekid(componentPath, template) {
+  function deleteFile(filepath) {
+    try {
+      fs.unlinkSync(filepath)
+    } catch(e) {
+      // console.log(e)
+    }
+  }
+
   function getRequires(requires, body) {
     return new Promise((resolve) => {
     for (var i = 0; i < body.length; i++) {
@@ -64,10 +71,11 @@ function Elekid(componentPath, template) {
   }
 
   __debug(`${componentPath}`, true)
-  __debug(`${process.cwd()}/${componentPath}`, true)
 
   const componentAbsolutePath = `${process.cwd()}/${componentPath}`
   DIRPATH = componentAbsolutePath.replace(/\/[^\/]+$/, '')
+
+  __debug(DIRPATH, true)
 
   let transform = babel.transformFileSync(componentAbsolutePath, {
     presets: ['es2015-node', 'react'],
@@ -83,12 +91,18 @@ function Elekid(componentPath, template) {
     const appString = reactDOMServer.renderToString(App)
     const body = template(appString)
 
-    __debug(template(appString), true)
-    const tmpobj = tmp.fileSync({ postfix: '.html' })
-    fs.writeFileSync(tmpobj.name, body, 'utf-8')
+    const indexPath = `${process.cwd()}/index.html`
+    fs.writeFileSync(indexPath, body, 'utf-8')
+
+    //do something when app is closing
+    process.on('exit', deleteFile.bind(this, indexPath));
+    //catches ctrl+c event
+    process.on('SIGINT', deleteFile.bind(this, indexPath));
+    //catches uncaught exceptions
+    process.on('uncaughtException', deleteFile.bind(this, indexPath));
 
     return url.format({
-      pathname: tmpobj.name,
+      pathname: indexPath,
       protocol: 'file:',
       slashes: true
     })
