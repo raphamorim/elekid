@@ -4,6 +4,17 @@ const react = require('react')
 const requireFromString = require('require-from-string')
 const reactDOMServer = require('react-dom/server')
 
+let DIRPATH
+
+const __debug = function debug(message, important) {
+  if (process.env.DEBUG) {
+    if (important)
+      return console.log('\x1b[36m%s\x1b[0m', message)
+
+    console.log(message)
+  }
+}
+
 function Masamune(componentPath, template) {
   function getRequires(requires, body) {
     return new Promise((resolve) => {
@@ -48,49 +59,59 @@ function Masamune(componentPath, template) {
     })
   }
 
-  let transform
+  __debug(`${componentPath}`, true)
+  __debug(`${process.cwd()}/${componentPath}`, true)
 
-  console.log(`${process.cwd()}/${componentPath}`)
-  transform = babel.transformFileSync(`${process.cwd()}/${componentPath}`, {
+  const componentAbsolutePath = `${process.cwd()}/${componentPath}`
+  DIRPATH = componentAbsolutePath.replace(/\/[^\/]+$/, '')
+
+  let transform = babel.transformFileSync(componentAbsolutePath, {
       presets: ['es2015-node'],
       ignore: /node_modules/,
       plugins: [
         'transform-react-jsx'
       ]
     })
+  transform = transform.code.replace('exports.default', 'module.exports')
+  transform = `require = require('../index.js').load; ${transform}`
 
-  getRequires([], transform.ast.program.body).then((result) => {
-    console.log(result)
-    transform = transform.code.replace('exports.default', 'module.exports')
-    console.log(transform)
-
-    try {
-      const app = requireFromString(transform)
-      console.log(app)
-      const App = react.createElement(app)
-      console.log(reactDOMServer.renderToString(App))
-    } catch(err) {
-      console.log(err)
-    }
-  })
+  try {
+    const app = requireFromString(transform)
+    const App = react.createElement(app)
+    const appString = reactDOMServer.renderToString(App)
+    return appString
+  } catch(err) {
+    __debug(err)
+  }
 }
 
-// const masamune_require = require('../index.js').req;
-// replace `require()` by `masamune_require(__dirname, './atoms/piranho.js');`
+// const require = require('../index.js').load;
+// require('./atoms/piranho.js');`
 
-exports.req = function masamuneRequire(dirname, dep) {
-  dep = dep.replace('./', '')
-  transform = babel.transformFileSync(`${dirname}/${dep}`, {
-    presets: ['es2015-node'],
-    ignore: /node_modules/,
-    plugins: [
-      'transform-react-jsx'
-    ]
-  })
-  transform = transform.code.replace('exports.default', 'module.exports')
-  const component = requireFromString(transform)
-  console.log(component)
-  return component
+exports.load = function load(path) {
+  try {
+    try {
+      const dep = require(path)
+      return dep
+    } catch (err) {
+      path = path.replace('./', '')
+      path = `${DIRPATH}/${path}.js`
+      __debug(path, true)
+
+      transform = babel.transformFileSync(path, {
+        presets: ['es2015-node'],
+        ignore: /node_modules/,
+        plugins: [
+          'transform-react-jsx'
+        ]
+      })
+      transform = transform.code.replace('exports.default', 'module.exports')
+      const component = requireFromString(transform)
+      return component
+    }
+  } catch (err) {
+    __debug(err)
+  }
 }
 
 exports.build = Masamune
