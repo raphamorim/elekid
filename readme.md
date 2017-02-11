@@ -7,19 +7,23 @@
 **tl;dr:** Promises to return all rendered components, regardless of whether it is ES2015 (es6), ES2016 or ES2017. Elekid works only with **React** (Soon: Inferno and Vuejs). Do you want add more support options? Send us a PR :)
 
 ```js
-elekid('path/to/Component.js') // 
+elekid('path/to/Component.js')
 ```
 
-#### Can I use it for develop beyond Electron apps?
+#### How it works?
 
-I strongly recommend: **NO**. Why? Elekid reads any code and parse/transpile it in runtime. It cost a lot, just imagine for every process, you will read/parse/transpile/tokenize/write.
+1. Read and transpile main component filepath, generating a node module
+2. Every require in this node module is replaced by smart require (which transpile the source in runtime before nodejs parse start)
+3. Parse'n deliver this module and repeat this it for every import/require missing.
+4. Create a dynamic HTML file based on render result
+5. When nodejs process dispatch `exit`, `SIGINT` or `uncaughtException` event: delete `_.html`
 
 #### Using config object instead path
 
 ```js
 elekid({
   path: 'path/to/Component.js',
-  template: (app) => `<html>${app}</html>`,
+  template: (app) => `<html>${app}</html>`
 })
 ```
 
@@ -66,6 +70,10 @@ module.exports = (app) => {
     </body>
   </html>`
 ```
+
+#### Can I use it for develop beyond Electron apps?
+
+I strongly recommend: **NO**. Why? Elekid reads any code and parse/transpile it in runtime. It cost a lot, just imagine for every process, you will read/parse/transpile/tokenize/write.
 
 ## Roadmap
 
