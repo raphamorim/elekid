@@ -1,13 +1,10 @@
-// const app = require('./app')
-// console.log(app)
-
 const elekid = require('./index')
 const template = (app) => {
   return `<!DOCTYPE html>
   <html>
     <head>
       <meta charset="utf-8"/>
-      <title>Retro</title>
+      <title>Template</title>
       <link rel="stylesheet" href="style.css">
     </head>
     <body>

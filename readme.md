@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/raphamorim/elekid/badge.svg?branch=master)](https://coveralls.io/github/raphamorim/elekid?branch=master) [![Build Status](https://travis-ci.org/raphamorim/elekid.svg)](https://travis-ci.org/raphamorim/elekid) [![Join the chat at https://gitter.im/raphamorim/origami.js](https://badges.gitter.im/raphamorim/elekid)](https://gitter.im/raphamorim/elekid?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+[![Coverage Status](https://coveralls.io/repos/github/raphamorim/elekid/badge.svg?branch=master)](https://coveralls.io/github/raphamorim/elekid?branch=master) [![Build Status](https://travis-ci.org/raphamorim/elekid.svg)](https://travis-ci.org/raphamorim/elekid) [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
 
 # Elekid
 
@@ -39,10 +39,10 @@ function createWindow() {
   let mainWindow = new BrowserWindow(config)
 
   mainWindow.loadURL(elekid({
-    path: 'src/App.js', 
+    path: 'src/App.js',
     template: template
   }))
-  
+
   mainWindow.on('closed', function() {
     mainWindow = null
   })
@@ -73,7 +73,7 @@ module.exports = (app) => {
 
 #### Can I use it for develop beyond Electron apps?
 
-I strongly recommend: **NO**. 
+I strongly recommend: **NO**.
 
 Why? Elekid reads any code and parse/transpile it in runtime. It cost a lot, just imagine for every process, you will read/parse/transpile/tokenize/write.
 
@@ -83,3 +83,9 @@ Why? Elekid reads any code and parse/transpile it in runtime. It cost a lot, jus
 - [ ] Inferno Support
 - [ ] Add option to set filename and filepath
 - [ ] Add option to return only rendered string
+
+#### Who's using:
+
+- [Retro Editor](https://github.com/raphamorim/retro)
+
+If you're using, [let me know](https://github.com/raphamorim/elekid/issues/new) :)
