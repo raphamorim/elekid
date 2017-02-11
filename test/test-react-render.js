@@ -22,10 +22,9 @@ const renderedApp = '<section role="dialog" class="modal" data-reactroot="" data
 
 process.env['ELEKID_DEBUG'] = true
 
-describe('React Render', function() {
-  context('Setting Template', function() {
-    it('should get app rendered wrapped by template', function(done) {
-
+describe('React Render', function () {
+  context('Setting Template', function () {
+    it('should get app rendered wrapped by template', function (done) {
       const result = elekid({
         path: 'test/fixtures/react/main.js',
         template: template,
@@ -38,9 +37,8 @@ describe('React Render', function() {
       done()
     })
   })
-  context('Without set template', function() {
-    it('should get app rendered only', function(done) {
-
+  context('Without set template', function () {
+    it('should get app rendered only', function (done) {
       const result = elekid({
         path: 'test/fixtures/react/main.js',
         resolve: 'app'
@@ -52,9 +50,8 @@ describe('React Render', function() {
       done()
     })
   })
-  context('Check if create tmp file', function() {
-    it('should have tmp file', function(done) {
-
+  context('Check if create tmp file', function () {
+    it('should have tmp file', function (done) {
       const result = elekid({
         path: 'test/fixtures/react/main.js',
         template: template

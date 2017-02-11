@@ -31,5 +31,10 @@
   "devDependencies": {
     "standard": "8.6.0",
     "mocha": "2.2.1"
-  }
+  },
+  "standard": {
+  "ignore": [
+    "test/**"
+  ]
+}
 }

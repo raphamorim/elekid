@@ -35,8 +35,9 @@ const logger = function _logger (message, important) {
 }
 
 function Elekid (config) {
-  if (!config.path)
+  if (!config.path) {
     return false
+  }
 
   const componentPath = config.path
   const template = config.template || ((app) => app)
@@ -117,8 +118,9 @@ function Elekid (config) {
     const appString = reactDOMServer.renderToString(App)
     const body = template(appString)
 
-    if (resolve && resolve === 'app')
+    if (resolve && resolve === 'app') {
       return body
+    }
 
     const indexPath = `${process.cwd()}/elekid.html`
     fs.writeFileSync(indexPath, body, 'utf-8')
