@@ -7,7 +7,7 @@
 **tl;dr:** Promises to return all rendered components, regardless of whether it is ES2015 (es6), ES2016 or ES2017. Elekid works only with **React** (Soon: Inferno and Vuejs). Do you want add more support options? Send us a PR :)
 
 ```js
-elekid('path/to/Component.js')
+elekid({ path: 'path/to/Component.js' })
 ```
 
 #### How it works?
@@ -18,14 +18,13 @@ elekid('path/to/Component.js')
 4. Create a dynamic HTML file based on render result
 5. When nodejs dispatch `exit`, `SIGINT` or `uncaughtException` event: delete `_.html`
 
-#### Using config object instead path
+#### Configs
 
-```js
-elekid({
-  path: 'path/to/Component.js',
-  template: (app) => `<html>${app}</html>`
-})
-```
+- path: path to get root component (required)
+
+- template: Wrapper fn to render App. Default: `(app) => app`
+
+- resolve: By default elekid returns filepath, however you can get only the rendered app string using `app` as paramater
 
 ## Electron Usage
 
