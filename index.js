@@ -91,7 +91,7 @@ function Elekid(componentPath, template) {
     const appString = reactDOMServer.renderToString(App)
     const body = template(appString)
 
-    const indexPath = `${process.cwd()}/index.html`
+    const indexPath = `${process.cwd()}/elekid.html`
     fs.writeFileSync(indexPath, body, 'utf-8')
 
     //do something when app is closing
