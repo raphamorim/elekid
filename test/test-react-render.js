@@ -31,6 +31,8 @@ describe('React Render', function () {
         resolve: 'app'
       })
 
+      console.log(result)
+
       assert.equal(typeof result, 'string')
       assert.equal(result, template(renderedApp))
 
@@ -44,6 +46,8 @@ describe('React Render', function () {
         resolve: 'app'
       })
 
+      console.log(result)
+
       assert.equal(typeof result, 'string')
       assert.equal(result, renderedApp)
 
@@ -56,6 +60,8 @@ describe('React Render', function () {
         path: 'test/fixtures/react/main.js',
         template: template
       })
+
+      console.log(result)
 
       assert.equal(typeof result, 'string')
       assert.equal(result, url.format({

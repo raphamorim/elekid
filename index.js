@@ -25,7 +25,7 @@ const extend = function _extend (a, b, undefOnly) {
 }
 
 const logger = function _logger (message, important) {
-  if (process.env.logger) {
+  if (process.env.ELEKID_DEBUG) {
     if (important) {
       return console.log('\x1b[36m%s\x1b[0m', message)
     }

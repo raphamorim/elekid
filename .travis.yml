@@ -1,5 +1,7 @@
 sudo: false
 language: node_js
+env:
+  - ELEKID_DEBUG=true
 node_js:
   - "6.1.0"
   - "6.4.0"
