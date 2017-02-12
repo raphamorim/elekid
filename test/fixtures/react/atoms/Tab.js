@@ -1,4 +1,4 @@
-import React, { Component } from 'React'
+import React, { Component } from 'react'
 
 export default class Tabs extends Component {
     // TODO: unfocus and focus (class)

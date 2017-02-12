@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 // import { log } from './helpers/index.js'
 import Tab from './atoms/Tab'
 
