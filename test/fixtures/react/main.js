@@ -1,9 +1,9 @@
 import React from 'react'
-// import { log } from './helpers/index.js'
+import { log } from './helpers'
 import Tab from './atoms/Tab'
 
 export default function Dialog (props) {
-  // log('sample')
+  log('sample')
 
   return (
     <section role='dialog' className='modal'>

@@ -1,6 +1,6 @@
 {
   "name": "elekid",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Electron Server Side Render",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "babel-core": "6.22.1",
     "babel-preset-es2015-node": "6.1.1",
     "babel-preset-react": "6.22.0",
+    "is-directory": "^0.3.1",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "require-from-string": "1.2.1"
@@ -33,8 +34,8 @@
     "mocha": "2.2.1"
   },
   "standard": {
-  "ignore": [
-    "test/**"
-  ]
-}
+    "ignore": [
+      "test/**"
+    ]
+  }
 }

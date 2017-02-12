@@ -4,6 +4,7 @@ const fs = require('fs')
 const url = require('url')
 const babel = require('babel-core')
 const react = require('react')
+const isDirectory = require('is-directory')
 const requireFromString = require('require-from-string')
 const reactDOMServer = require('react-dom/server')
 
@@ -150,7 +151,13 @@ const load = function _load (path) {
       return dep
     } catch (err) {
       path = path.replace('./', '')
-      path = `${DIRPATH}/${path}.js`
+      path = `${DIRPATH}/${path}`
+
+      if (isDirectory.sync(path)) {
+        path = path + '/index.js'
+      } else {
+        path = path + '.js'
+      }
 
       logger(path, true)
 
