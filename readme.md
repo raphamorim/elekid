@@ -76,6 +76,35 @@ I strongly recommend: **NO**.
 
 Why? Elekid reads any code and parse/transpile it in runtime. It cost a lot, just imagine for every process, you will read/parse/transpile/tokenize/write.
 
+## Render it only
+
+##### greeting.js
+
+```js
+import React from 'react'
+
+class Greeting extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>
+  }
+}
+
+export default Greeting
+```
+
+##### getting it
+
+```js
+const elekid = require('elekid')
+console.log(elekid({path: './greeting.js', resolve: 'app'}))
+```
+
+##### output
+
+```
+<h1 data-reactroot="" data-reactid="1" data-react-checksum="1601575969"><!-- react-text: 2 -->Hello, <!-- /react-text --></h1>
+```
+
 ## Roadmap
 
 - [ ] Vuejs Support
