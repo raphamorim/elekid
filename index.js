@@ -119,7 +119,11 @@ function Elekid (config) {
     const appString = reactDOMServer.renderToString(App)
     const body = template(appString)
 
-    if (resolve && resolve === 'app') {
+    if (resolve && resolve === 'react') {
+      return App
+    }
+
+    if (resolve && resolve === 'string') {
       return body
     }
 

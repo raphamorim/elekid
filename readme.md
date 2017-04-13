@@ -96,7 +96,7 @@ export default Greeting
 
 ```js
 const elekid = require('elekid')
-console.log(elekid({path: './greeting.js', resolve: 'app'}))
+console.log(elekid({path: './greeting.js', resolve: 'string'}))
 ```
 
 ##### output
@@ -104,6 +104,23 @@ console.log(elekid({path: './greeting.js', resolve: 'app'}))
 ```
 <h1 data-reactroot="" data-reactid="1" data-react-checksum="1601575969"><!-- react-text: 2 -->Hello, <!-- /react-text --></h1>
 ```
+
+## Process and get reactElement
+
+```js
+const elekid = require('elekid')
+console.log(elekid({path: './greeting.js', resolve: 'react'}))
+/*
+{ '$$typeof': Symbol(react.element),
+  type: [Function: Dialog],
+  key: null,
+  ref: null,
+  props: {},
+  _owner: null,
+  _store: {} }
+*/
+```
+
 
 ## Roadmap
 

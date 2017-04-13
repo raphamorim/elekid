@@ -28,7 +28,7 @@ describe('React Render', function () {
       const result = elekid({
         path: 'test/fixtures/react/main.js',
         template: template,
-        resolve: 'app'
+        resolve: 'string'
       })
 
       assert.equal(typeof result, 'string')
@@ -41,11 +41,23 @@ describe('React Render', function () {
     it('should get app rendered only', function (done) {
       const result = elekid({
         path: 'test/fixtures/react/main.js',
-        resolve: 'app'
+        resolve: 'string'
       })
 
       assert.equal(typeof result, 'string')
       assert.equal(result, renderedApp)
+
+      done()
+    })
+  })
+  context('Without set template', function () {
+    it('should get app rendered only', function (done) {
+      const result = elekid({
+        path: 'test/fixtures/react/main.js',
+        resolve: 'react'
+      })
+
+      assert.equal(typeof result, 'object')
 
       done()
     })
