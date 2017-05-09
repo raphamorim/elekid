@@ -26,7 +26,7 @@ const extend = function _extend (a, b, undefOnly) {
 }
 
 const logger = function _logger (message, important) {
-  if (process.env.ELEKID_DEBUG) {
+  if (process.env.DEBUG) {
     if (important) {
       return console.log('\x1b[36m%s\x1b[0m', message)
     }
@@ -52,50 +52,6 @@ function Elekid (config) {
     }
   }
 
-  function getRequires (requires, body) { // eslint-disable-line
-    return new Promise((resolve) => {
-      for (var i = 0; i < body.length; i++) {
-        if (!body[i] || !body[i].type) return
-
-        if (body[i].type === 'VariableDeclarator') {
-          getRequires(requires, [body[i].init])
-        }
-        if (body[i].type === 'VariableDeclaration') {
-          getRequires(requires, body[i].declarations)
-        }
-        if (body[i].type === 'ConditionalExpression') {
-          getRequires(requires, [body[i].test, body[i].consequent])
-        }
-        if (body[i].type === 'AssignmentExpression') {
-          getRequires(requires, [body[i].left, body[i].right])
-        }
-        if (body[i].type === 'ExpressionStatement') {
-          if (body[i].expression.type === 'SequenceExpression') {
-            getRequires(requires, body[i].expression.expressions)
-          }
-
-          getRequires(requires, [body[i].expression.left, body[i].expression.right])
-        }
-        if (body[i].type === 'FunctionDeclaration') {
-          getRequires(requires, (body[i].body.body || []))
-        }
-        if (body[i].type === 'ImportDeclaration') {
-          requires.push(body[i].source.value)
-        }
-        if (body[i].type === 'CallExpression') {
-          if (body[i].callee.type === 'MemberExpression') {
-            getRequires(requires, [body[i].callee.object])
-          }
-
-          if (body[i].callee.name === 'require') {
-            requires.push(body[i].arguments[0].value)
-          }
-        }
-      }
-      resolve(requires)
-    })
-  }
-
   logger(`${componentPath}`, true)
 
   const componentAbsolutePath = `${process.cwd()}/${componentPath}`
@@ -104,8 +60,16 @@ function Elekid (config) {
   logger(DIRPATH, true)
 
   let transform = babel.transformFileSync(componentAbsolutePath, {
-    presets: ['es2015-node', 'react'],
-    ignore: /node_modules/
+    presets: ['es2015-node', require('babel-preset-react'), require('babel-preset-flow')],
+    ignore: /node_modules/,
+    plugins: [
+      // used to comply to babel-preset-react-app
+      require('babel-plugin-transform-class-properties'),
+      // used to comply to babel-preset-react-app
+      require('babel-plugin-transform-object-rest-spread'),
+      // used to remove css imports
+      [ require('babel-plugin-transform-require-ignore').default, { extensions: ['.css'] } ]
+    ]
   })
 
   transform = transform.code.replace('exports.default', 'module.exports')
@@ -115,17 +79,17 @@ function Elekid (config) {
 
   try {
     const app = requireFromString(transform)
+    if (resolve && resolve === 'module')
+      return app
+
     const App = react.createElement(app)
+    if (resolve && resolve === 'react')
+      return App
+
     const appString = reactDOMServer.renderToString(App)
     const body = template(appString)
-
-    if (resolve && resolve === 'react') {
-      return App
-    }
-
-    if (resolve && resolve === 'string') {
+    if (resolve && resolve === 'string')
       return body
-    }
 
     const indexPath = `${process.cwd()}/elekid.html`
     fs.writeFileSync(indexPath, body, 'utf-8')
@@ -143,6 +107,7 @@ function Elekid (config) {
       slashes: true
     })
   } catch (err) {
+    return err
     logger(err)
   }
 }
@@ -166,9 +131,18 @@ const load = function _load (path) {
       logger(path, true)
 
       let transform = babel.transformFileSync(path, {
-        presets: ['es2015-node', 'react'],
-        ignore: /node_modules/
+        presets: ['es2015-node', require('babel-preset-react'), require('babel-preset-flow')],
+        ignore: /node_modules/,
+        plugins: [
+          // used to comply to babel-preset-react-app
+          require('babel-plugin-transform-class-properties'),
+          // used to comply to babel-preset-react-app
+          require('babel-plugin-transform-object-rest-spread'),
+          // used to remove css imports
+          [ require('babel-plugin-transform-require-ignore').default, { extensions: ['.css'] } ]
+        ]
       })
+
       transform = transform.code.replace('exports.default', 'module.exports')
       const pathElekid = (process.env.ELEKID_DEBUG) ? `${process.cwd()}/index.js` : 'elekid'
       transform = `"use strict"; require = require('${pathElekid}').load; ${transform}`
@@ -176,6 +150,7 @@ const load = function _load (path) {
       return component
     }
   } catch (err) {
+    return err
     logger(err)
   }
 }
