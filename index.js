@@ -8,6 +8,19 @@ const isDirectory = require('is-directory')
 const requireFromString = require('require-from-string')
 const reactDOMServer = require('react-dom/server')
 
+const babelConfig = {
+  presets: [require('babel-preset-react'), require('babel-preset-flow'), 'es2015'],
+  ignore: /node_modules/,
+  plugins: [
+    // used to comply to babel-preset-react-app
+    require('babel-plugin-transform-class-properties'),
+    // used to comply to babel-preset-react-app
+    require('babel-plugin-transform-object-rest-spread'),
+    // used to remove css imports
+    [ require('babel-plugin-transform-require-ignore').default, { extensions: ['.css'] } ]
+  ]
+}
+
 let DIRPATH
 
 const extend = function _extend (a, b, undefOnly) {
@@ -59,18 +72,7 @@ function Elekid (config) {
 
   logger(DIRPATH, true)
 
-  let transform = babel.transformFileSync(componentAbsolutePath, {
-    presets: ['es2015-node', require('babel-preset-react'), require('babel-preset-flow')],
-    ignore: /node_modules/,
-    plugins: [
-      // used to comply to babel-preset-react-app
-      require('babel-plugin-transform-class-properties'),
-      // used to comply to babel-preset-react-app
-      require('babel-plugin-transform-object-rest-spread'),
-      // used to remove css imports
-      [ require('babel-plugin-transform-require-ignore').default, { extensions: ['.css'] } ]
-    ]
-  })
+  let transform = babel.transformFileSync(componentAbsolutePath, babelConfig)
 
   transform = transform.code.replace('exports.default', 'module.exports')
 
@@ -79,17 +81,20 @@ function Elekid (config) {
 
   try {
     const app = requireFromString(transform)
-    if (resolve && resolve === 'module')
+    if (resolve && resolve === 'module') {
       return app
+    }
 
     const App = react.createElement(app)
-    if (resolve && resolve === 'react')
+    if (resolve && resolve === 'react') {
       return App
+    }
 
     const appString = reactDOMServer.renderToString(App)
     const body = template(appString)
-    if (resolve && resolve === 'string')
+    if (resolve && resolve === 'string') {
       return body
+    }
 
     const indexPath = `${process.cwd()}/elekid.html`
     fs.writeFileSync(indexPath, body, 'utf-8')
@@ -107,8 +112,8 @@ function Elekid (config) {
       slashes: true
     })
   } catch (err) {
-    return err
     logger(err)
+    return err
   }
 }
 
@@ -130,18 +135,7 @@ const load = function _load (path) {
 
       logger(path, true)
 
-      let transform = babel.transformFileSync(path, {
-        presets: ['es2015-node', require('babel-preset-react'), require('babel-preset-flow')],
-        ignore: /node_modules/,
-        plugins: [
-          // used to comply to babel-preset-react-app
-          require('babel-plugin-transform-class-properties'),
-          // used to comply to babel-preset-react-app
-          require('babel-plugin-transform-object-rest-spread'),
-          // used to remove css imports
-          [ require('babel-plugin-transform-require-ignore').default, { extensions: ['.css'] } ]
-        ]
-      })
+      let transform = babel.transformFileSync(path, babelConfig)
 
       transform = transform.code.replace('exports.default', 'module.exports')
       const pathElekid = (process.env.ELEKID_DEBUG) ? `${process.cwd()}/index.js` : 'elekid'
@@ -150,8 +144,8 @@ const load = function _load (path) {
       return component
     }
   } catch (err) {
-    return err
     logger(err)
+    return err
   }
 }
 
