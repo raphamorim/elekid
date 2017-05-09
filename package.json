@@ -1,6 +1,6 @@
 {
   "name": "elekid",
-  "version": "0.2.3",
+  "version": "0.2.3-rc",
   "description": "Electron Server Side Render",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "keywords": [
     "react",
     "electron",
+    "flow",
     "server",
     "render",
     "ssr",
@@ -22,21 +23,21 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "6.22.1",
-    "babel-preset-es2015-node": "^6",
     "babel-plugin-transform-class-properties": "^6",
     "babel-plugin-transform-object-rest-spread": "^6",
     "babel-plugin-transform-require-ignore": "^0.1.0",
     "babel-preset-env": "^0.0.9",
     "babel-preset-react": "^6",
     "babel-preset-flow": "^6.23.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "is-directory": "^0.3.1",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "require-from-string": "1.2.1"
   },
   "devDependencies": {
-    "standard": "8.6.0",
-    "mocha": "2.2.1"
+    "mocha": "2.2.1",
+    "standard": "8.6.0"
   },
   "standard": {
     "ignore": [
