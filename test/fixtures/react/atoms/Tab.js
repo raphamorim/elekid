@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 export default class Tabs extends Component {
-    // TODO: unfocus and focus (class)
+  // TODO: unfocus and focus (class)
 
   constructor (props) {
     super()
@@ -17,7 +17,7 @@ export default class Tabs extends Component {
     for (let i = 0; i < items.length; i++) {
       tabItems.push(
         <div className='tabs-item active'>items[i]</div>
-            )
+      )
     }
 
     return tabItems

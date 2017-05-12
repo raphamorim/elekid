@@ -1,0 +1,9 @@
+[ignore]
+.*/__tests__/.*
+
+[include]
+../node_modules/react
+
+[libs]
+
+[options]

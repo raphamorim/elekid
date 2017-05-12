@@ -21,6 +21,7 @@ const template = (app) => {
 const renderedApp = '<section role="dialog" class="modal" data-reactroot="" data-reactid="1" data-react-checksum="-896964529"><input type="text" class="modal-search" id="modal-search" placeholder="Search for packages...." data-reactid="2"/><div class="modal-items" data-reactid="3"></div><section role="tabs" class="tabs" data-reactid="4"></section></section>'
 
 process.env['ELEKID_DEBUG'] = true
+process.env['DEBUG'] = true
 
 describe('React Render', function () {
   context('Setting Template', function () {

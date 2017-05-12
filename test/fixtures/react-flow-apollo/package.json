@@ -1,0 +1,23 @@
+{
+  "name": "react-flow-apollo",
+  "version": "0.1.0",
+  "peerDependencies": {
+    "react": "^15.4.2"
+  },
+  "dependencies": {
+    "apollo-client": "^1.2.2",
+    "graphql-tag": "^2.0.0",
+    "linear-interpolator": "^1.0.2",
+    "memoize-functions": "^1.0.0",
+    "react-apollo": "^1.2.0",
+    "react-with-dimension": "^1.0.9",
+    "recompose": "^0.22.0"
+  },
+  "devDependencies": {
+    "apollo-client": "^1.0.3",
+    "enzyme": "^2",
+    "mos-plugin-execute": "^1.0.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}

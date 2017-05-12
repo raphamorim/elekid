@@ -1,0 +1,14 @@
+.image- {
+  &wrapper {
+    transition: opacity 0.3s;
+    box-shadow: #000 0 0 0;
+  }
+
+  &wrapper--visible {
+    opacity: 1;
+  }
+
+  &wrapper--hidden {
+    opacity: 0;
+  }
+}
